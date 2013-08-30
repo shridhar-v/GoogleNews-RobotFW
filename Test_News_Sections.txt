@@ -1,0 +1,21 @@
+*** Settings ***
+Resource          resource.txt
+
+*** Test Cases ***
+Test Section Counts
+    News Sections Should Be    12
+
+Test All News Section Names
+    Nth News Section Name Should Be    1    Top Stories
+    Nth News Section Name Should Be    2    News near you
+    Nth News Section Name Should Be    3    India
+    Nth News Section Name Should Be    4    World
+    Nth News Section Name Should Be    5    Business
+    Nth News Section Name Should Be    6    Technology
+    Nth News Section Name Should Be    7    Entertainment
+    Nth News Section Name Should Be    8    Sports
+    Nth News Section Name Should Be    9    Science
+    Nth News Section Name Should Be    10    Health
+    Nth News Section Name Should Be    11    More Top Stories
+    Nth News Section Name Should Be    12    Spotlight
+    [Teardown]    Close Browser

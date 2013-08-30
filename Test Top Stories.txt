@@ -1,0 +1,22 @@
+*** Settings ***
+Documentation     A test suite with testcases for testing 'Top Stories' section of the google News website
+Resource          resource.txt
+
+*** Test Cases ***
+Open Google News
+    Open Google News
+    [Teardown]
+
+Test Top Stories Count
+    Top Stories Count Should Be    7
+
+Test All Top Stories
+    Open Nth Top Story And Verify Top Result Is Same    6
+    Open Nth Top Story And Verify Top Result Is Same    3
+    Open Nth Top Story And Verify Top Result Is Same    5
+    Open Nth Top Story And Verify Top Result Is Same    1
+    Open Nth Top Story And Verify Top Result Is Same    2
+    Open Nth Top Story And Verify Top Result Is Same    7
+    Open Nth Top Story And Verify Top Result Is Same    9
+    Open Nth Top Story And Verify Top Result Is Same    10
+    [Teardown]

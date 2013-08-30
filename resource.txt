@@ -1,0 +1,54 @@
+*** Settings ***
+Documentation     A resource file containing the application specific keywords
+...               that create our own domain specific language. This resource
+...               implements keywords for testing HTML version of the test
+...               application.
+Library           Selenium2Custom.py
+
+*** Variables ***
+${BASE_URL}       http://news.google.co.in/
+${BROWSER}        chrome
+
+*** Keywords ***
+Open Google News
+    [Documentation]    Opens google news base page
+    Open Browser    ${BASE_URL}    ${BROWSER}
+    Title Should Be    Google News
+    Maximize Browser Window
+    Wait Until Page Contains    Personalize Google News    15
+
+Top Stories Count Should Be
+    [Arguments]    ${top_stories_count}
+    Xpath Should Match X Times    //ul[contains(@class,'nav-items')]//*[contains(@class,'nv-FRONTPAGE')]//*[@class='topic']    ${top_stories_count}    Number of top stories displayed in the left panel
+
+Open Nth Top Story And Verify Top Result Is Same
+    [Arguments]    ${STORY_ID}
+    ${STORY_TITLE}    Get Text    xpath=(//ul[contains(@class,'nav-items')]//*[contains(@class,'nv-FRONTPAGE')]//*[@class='topic'])[${STORY_ID}]
+    Log    ${STORY_ID} th story is : ${STORY_TITLE}
+    Click Element    xpath=(//ul[contains(@class,'nav-items')]//*[contains(@class,'nv-FRONTPAGE')]//*[@class='topic'])[${STORY_ID}]
+    Wait Until Page Contains    Personalize Google News    50
+    Element Text Should Be    xpath=//div[@class='basic-title has-follow-button']//div[@class='section-name']    ${STORY_TITLE}
+    ${HEADLINE}    Get Text    xpath=(((//div[@cid])[1])//span[@class='titletext'])[1]
+    Log    First headline displayed is : ${HEADLINE}
+    #Element Should Contain    xpath=(//div[@cid])[1]    ${STORY_TITLE}
+
+News Sections Should Be
+    [Arguments]    ${SECTION_COUNT}
+    Xpath Should Match X Times    //div[@class='browse-sidebar']//li[contains(@class,'nav-item')]/a[@class='persistentblue']    ${SECTION_COUNT}    Number of news sections
+
+Nth News Section Name Should Be
+    [Arguments]    ${SECTION_ID}    ${SECTION_NAME}
+    Element Text Should Be    xpath=(//div[@class='browse-sidebar']//li[contains(@class,'nav-item')]/a[@class='persistentblue'])[${SECTION_ID}]    ${SECTION_NAME}
+
+Latest Match Should Present
+    [Arguments]    ${match_desc}
+    [Documentation]    Goes to the latest match page,
+    ...    verify the page contains given match descriotiuson
+    ...
+    ...
+    ...    49th Match: Canada v Netherlands at King City (NW) -
+    Open Browser    http://www.espncricinfo.com/    chrome
+    Sleep    10s    wating for main page laod ... I think 10 seconds would be suffiecient !!!
+    Click Element    name="&lpos=cricinfo_mainnav&lid=livescores"
+    Sleep    5s    wating for main page laod ... I think 10 seconds would be suffiecient !!!
+    Page Should Contain    ${match_desc}
